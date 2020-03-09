@@ -54,7 +54,7 @@ try {
     $widgetObj = new CentreonWidget($centreon, $db);
     $preferences = $widgetObj->getWidgetPreferences($widgetId);
 
-    $autoRefresh = filter_var($preferences['refresh_interval'],FILTER_VALIDATE_INT);
+    $autoRefresh = filter_var($preferences['refresh_interval'], FILTER_VALIDATE_INT);
     $frameheight = filter_var($preferences['frameheight'], FILTER_VALIDATE_INT);
 
     if ($autoRefresh === false || $autoRefresh < 5) {
