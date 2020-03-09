@@ -39,19 +39,22 @@ require_once $centreon_path . 'www/class/centreonSession.class.php';
 require_once $centreon_path . 'www/class/centreonWidget.class.php';
 require_once $centreon_path . 'bootstrap.php';
 
-
 session_start();
 if (!isset($_SESSION['centreon']) || !isset($_REQUEST['widgetId'])) {
     exit;
 }
 $centreon = $_SESSION['centreon'];
-$widgetId = $_REQUEST['widgetId'];
+$widgetId = filter_var($_REQUEST['widgetId'], FILTER_VALIDATE_INT);
 
 try {
+    if ($widgetId === false) {
+        throw new InvalidArgumentException('Widget ID must be an integer');
+    }
+
     $db = $dependencyInjector['configuration_db'];
     $widgetObj = new CentreonWidget($centreon, $db);
     $preferences = $widgetObj->getWidgetPreferences($widgetId);
-    $autoRefresh = 0;
+
     if (isset($preferences['refresh_interval'])) {
         $autoRefresh = $preferences['refresh_interval'];
     }
@@ -78,7 +81,7 @@ try {
         <script type="text/javascript" src="../../include/common/javascript/widgetUtils.js"></script>
     </head>
     <body>
-        <iframe id="test" width="100%" height="900px"></iframe>
+        <iframe id="webContainer" width="100%" height="900px"></iframe>
     </body>
     <script type="text/javascript">
         var widgetId = <?php echo $widgetId; ?>;
@@ -88,7 +91,7 @@ try {
         var timeout;
 
         function loadPage() {
-            jQuery("#test").attr('src', website);
+            jQuery("#webContainer").attr('src', website);
             parent.iResize(window.name, frameheight);
 
             if (autoRefresh) {
