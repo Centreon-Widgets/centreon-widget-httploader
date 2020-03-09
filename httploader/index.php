@@ -57,7 +57,7 @@ try {
     $autoRefresh = filter_var($preferences['refresh_interval'],FILTER_VALIDATE_INT);
     $frameheight = filter_var($preferences['frameheight'],FILTER_VALIDATE_INT);
 
-    if ($autoRefresh === false) {
+    if ($autoRefresh === false || $autoRefresh < 5) {
         $autoRefresh = 30;
     }
 
@@ -94,14 +94,12 @@ try {
         var widgetId = <?php echo $widgetId; ?>;
         var website = '<?php echo $preferences['website'];?>';
         var frameheight = <?php echo $frameheight;?>;
-        console.log(frameheight);
         var autoRefresh = <?php echo $autoRefresh;?>;
         var timeout;
-        
+
         function loadPage() {
             jQuery("#webContainer").attr('src', website);
             parent.iResize(window.name, frameheight);
-
             if (autoRefresh) {
                 if (timeout) {
                     clearTimeout(timeout);
