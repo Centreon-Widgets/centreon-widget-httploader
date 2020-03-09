@@ -50,14 +50,21 @@ try {
     if ($widgetId === false) {
         throw new InvalidArgumentException('Widget ID must be an integer');
     }
-
     $db = $dependencyInjector['configuration_db'];
     $widgetObj = new CentreonWidget($centreon, $db);
     $preferences = $widgetObj->getWidgetPreferences($widgetId);
 
-    if (isset($preferences['refresh_interval'])) {
-        $autoRefresh = $preferences['refresh_interval'];
+    $autoRefresh = filter_var($preferences['refresh_interval'],FILTER_VALIDATE_INT);
+    $frameheight = filter_var($preferences['frameheight'],FILTER_VALIDATE_INT);
+
+    if ($autoRefresh === false) {
+        $autoRefresh = 30;
     }
+
+    if ($frameheight === false) {
+        $frameheight = 900;
+    }    
+
 } catch (Exception $e) {
     echo $e->getMessage() . "<br/>";
     exit;
@@ -86,10 +93,11 @@ try {
     <script type="text/javascript">
         var widgetId = <?php echo $widgetId; ?>;
         var website = '<?php echo $preferences['website'];?>';
-        var frameheight = '<?php echo $preferences['frameheight'];?>';
-        var autoRefresh = '<?php echo $preferences['refresh_interval'];?>';
+        var frameheight = <?php echo $frameheight;?>;
+        console.log(frameheight);
+        var autoRefresh = <?php echo $autoRefresh;?>;
         var timeout;
-
+        
         function loadPage() {
             jQuery("#webContainer").attr('src', website);
             parent.iResize(window.name, frameheight);
