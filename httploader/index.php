@@ -88,24 +88,6 @@ try {
         <script type="text/javascript" src="../../include/common/javascript/widgetUtils.js"></script>
     </head>
     <body>
-<<<<<<< HEAD
-	<iframe id="test" width="100%" height="900px"></iframe>
-    </body>
-<script type="text/javascript">
-var widgetId = <?php echo $widgetId; ?>;
-var website = '<?php echo $preferences['website'];?>';
-var frameheight = '<?php echo $preferences['frameheight'];?>';
-var autoRefresh = '<?php echo $preferences['refresh_interval'];?>';
-var timeout;
-
-function loadPage() {
-    jQuery("#test").attr('src', website);
-    parent.iResize(window.name, frameheight);
-
-    if (autoRefresh) {
-        if (timeout) {
-            clearTimeout(timeout);
-=======
         <iframe id="webContainer" width="100%" height="900px"></iframe>
     </body>
     <script type="text/javascript">
@@ -124,7 +106,6 @@ function loadPage() {
                 }
                 timeout = setTimeout(loadPage, (autoRefresh * 1000));
             }
->>>>>>> 8428311... fix(widget): Sanitize WidgetID and form Inputs (#8)
         }
         timeout = setTimeout(loadPage, (autoRefresh * 1000));
     }
