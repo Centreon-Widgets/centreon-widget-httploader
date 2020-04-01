@@ -107,11 +107,8 @@ try {
                 timeout = setTimeout(loadPage, (autoRefresh * 1000));
             }
         }
-        timeout = setTimeout(loadPage, (autoRefresh * 1000));
-    }
-}
-jQuery(function() {
-    loadPage();
-});
+        jQuery(function() {
+            loadPage();
+        });
 </script>
 </html>
